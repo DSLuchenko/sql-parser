@@ -3,22 +3,22 @@ package com.dsluchenko.app.entity;
 import java.util.Objects;
 
 public class Column {
-    private String sourceName;
+    private Table table;
     private String name;
     private String alias;
 
-    public Column(String sourceName, String name, String alias) {
-        this.sourceName = sourceName;
+    public Column(Table table, String name, String alias) {
+        this.table = table;
         this.name = name;
         this.alias = alias;
     }
 
-    public String getSourceName() {
-        return sourceName;
+    public Table getTable() {
+        return table;
     }
 
-    public void setSourceName(String sourceName) {
-        this.sourceName = sourceName;
+    public void setTable(Table table) {
+        this.table = table;
     }
 
     public String getName() {
@@ -42,11 +42,11 @@ public class Column {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Column column = (Column) o;
-        return sourceName.equals(column.sourceName) && name.equals(column.name) && alias.equals(column.alias);
+        return table.equals(column.table) && name.equals(column.name) && alias.equals(column.alias);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sourceName, name, alias);
+        return Objects.hash(table, name, alias);
     }
 }

@@ -24,11 +24,11 @@ public class Query {
         this.columns = columns;
     }
 
-    public List<Table> getFromSources() {
+    public List<Table> getTables() {
         return fromTables;
     }
 
-    public void setFromSources(List<Table> fromTables) {
+    public void setTables(List<Table> fromTables) {
         this.fromTables = fromTables;
     }
 
