@@ -1,6 +1,6 @@
 package app.core;
 
-import com.dsluchenko.app.core.Parser;
+import com.dsluchenko.app.core.QueryParser;
 import com.dsluchenko.app.entity.Column;
 import com.dsluchenko.app.entity.Table;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ParserTest {
+public class QueryParserTest {
     @Test
     public void fillListColumns() {
         String selectAllColumns = "SELECT *";
@@ -22,23 +22,23 @@ public class ParserTest {
         String selectManyColumnsWithAliasAndWithManySource = "SELECT book.id b_id, author.id a_id";
 
 
-        List<Column> expectedSelectAllColumns = List.of(new Column("", "*", ""));
-        List<Column> expectedSelectOneColumnWithoutAliasAndWithoutSource = List.of(new Column("", "id", ""));
-        List<Column> expectedSelectOneColumnWithAliasAndWithoutSource = List.of(new Column("", "id", "i"));
-        List<Column> expectedSelectOneColumnWithAliasAndWithSource = List.of(new Column("book", "id", "i"));
-        List<Column> expectedSelectManyColumnsWithoutAliasAndWithoutSource = List.of(new Column("", "id", ""), new Column("", "author", ""));
-        List<Column> expectedSelectManyColumnsWithAliasAndWithoutSource = List.of(new Column("", "id", "i"), new Column("", "author", "a"));
-        List<Column> expectedSelectManyColumnsWithAliasAndWithSource = List.of(new Column("book", "id", "i"), new Column("book", "author", "a"));
-        List<Column> expectedSelectManyColumnsWithAliasAndWithManySource = List.of(new Column("book", "id", "b_id"), new Column("author", "id", "a_id"));
+        List<Column> expectedSelectAllColumns = List.of(new Column(new Table("book", ""), "*", ""));
+        List<Column> expectedSelectOneColumnWithoutAliasAndWithoutSource = List.of(new Column(new Table("book", ""), "id", ""));
+        List<Column> expectedSelectOneColumnWithAliasAndWithoutSource = List.of(new Column(new Table("book", ""), "id", "i"));
+        List<Column> expectedSelectOneColumnWithAliasAndWithSource = List.of(new Column(new Table("book", ""), "id", "i"));
+        List<Column> expectedSelectManyColumnsWithoutAliasAndWithoutSource = List.of(new Column(new Table("book", ""), "id", ""), new Column(new Table("book", ""), "author", ""));
+        List<Column> expectedSelectManyColumnsWithAliasAndWithoutSource = List.of(new Column(new Table("book", ""), "id", "i"), new Column(new Table("book", ""), "author", "a"));
+        List<Column> expectedSelectManyColumnsWithAliasAndWithSource = List.of(new Column(new Table("book", ""), "id", "i"), new Column(new Table("book", ""), "author", "a"));
+        List<Column> expectedSelectManyColumnsWithAliasAndWithManySource = List.of(new Column(new Table("book", ""), "id", "b_id"), new Column(new Table("author", ""), "id", "a_id"));
 
-        List<Column> actualSelectAllColumns = Parser.fillListColumns(selectAllColumns);
-        List<Column> actualSelectOneColumnWithoutAliasAndWithoutSource = Parser.fillListColumns(selectOneColumnWithoutAliasAndWithoutSource);
-        List<Column> actualSelectOneColumnWithAliasAndWithoutSource = Parser.fillListColumns(selectOneColumnWithAliasAndWithoutSource);
-        List<Column> actualSelectOneColumnWithAliasAndWithSource = Parser.fillListColumns(selectOneColumnWithAliasAndWithSource);
-        List<Column> actualSelectManyColumnsWithoutAliasAndWithoutSource = Parser.fillListColumns(selectManyColumnsWithoutAliasAndWithoutSource);
-        List<Column> actualSelectManyColumnsWithAliasAndWithoutSource = Parser.fillListColumns(selectManyColumnsWithAliasAndWithoutSource);
-        List<Column> actualSelectManyColumnsWithAliasAndWithSource = Parser.fillListColumns(selectManyColumnsWithAliasAndWithSource);
-        List<Column> actualSelectManyColumnsWithAliasAndWithManySource = Parser.fillListColumns(selectManyColumnsWithAliasAndWithManySource);
+        List<Column> actualSelectAllColumns = QueryParser.fillListColumns(selectAllColumns, List.of(new Table("book", "")));
+        List<Column> actualSelectOneColumnWithoutAliasAndWithoutSource = QueryParser.fillListColumns(selectOneColumnWithoutAliasAndWithoutSource, List.of(new Table("book", "")));
+        List<Column> actualSelectOneColumnWithAliasAndWithoutSource = QueryParser.fillListColumns(selectOneColumnWithAliasAndWithoutSource, List.of(new Table("book", "")));
+        List<Column> actualSelectOneColumnWithAliasAndWithSource = QueryParser.fillListColumns(selectOneColumnWithAliasAndWithSource, List.of(new Table("book", "")));
+        List<Column> actualSelectManyColumnsWithoutAliasAndWithoutSource = QueryParser.fillListColumns(selectManyColumnsWithoutAliasAndWithoutSource, List.of(new Table("book", "")));
+        List<Column> actualSelectManyColumnsWithAliasAndWithoutSource = QueryParser.fillListColumns(selectManyColumnsWithAliasAndWithoutSource, List.of(new Table("book", "")));
+        List<Column> actualSelectManyColumnsWithAliasAndWithSource = QueryParser.fillListColumns(selectManyColumnsWithAliasAndWithSource, List.of(new Table("book", "")));
+        List<Column> actualSelectManyColumnsWithAliasAndWithManySource = QueryParser.fillListColumns(selectManyColumnsWithAliasAndWithManySource, List.of(new Table("book", ""), new Table("author", "")));
 
         assertEquals(expectedSelectAllColumns, actualSelectAllColumns);
         assertEquals(expectedSelectOneColumnWithoutAliasAndWithoutSource, actualSelectOneColumnWithoutAliasAndWithoutSource);
@@ -68,12 +68,12 @@ public class ParserTest {
         List<Table> expectedFromManyTableNameWithAliasOnlySecondTable = List.of(new Table("book", ""), new Table("author", "a"));
 
 
-        List<Table> actualFromOneTableNameWithoutAlias = Parser.fillListTable(fromOneTableNameWithoutAlias);
-        List<Table> actualFromOneTableNameWithAlias = Parser.fillListTable(fromOneTableNameWithAlias);
-        List<Table> actualFromManyTableNameWithoutAlias = Parser.fillListTable(fromManyTableNameWithoutAlias);
-        List<Table> actualFromManyTableNameWithAliasOnlyFirstTable = Parser.fillListTable(fromManyTableNameWithAliasOnlyFirstTable);
-        List<Table> actualFromManyTableNameWithAlias = Parser.fillListTable(fromManyTableNameWithAlias);
-        List<Table> actualFromManyTableNameWithAliasOnlySecondTable = Parser.fillListTable(fromManyTableNameWithAliasOnlySecondTable);
+        List<Table> actualFromOneTableNameWithoutAlias = QueryParser.fillListTable(fromOneTableNameWithoutAlias);
+        List<Table> actualFromOneTableNameWithAlias = QueryParser.fillListTable(fromOneTableNameWithAlias);
+        List<Table> actualFromManyTableNameWithoutAlias = QueryParser.fillListTable(fromManyTableNameWithoutAlias);
+        List<Table> actualFromManyTableNameWithAliasOnlyFirstTable = QueryParser.fillListTable(fromManyTableNameWithAliasOnlyFirstTable);
+        List<Table> actualFromManyTableNameWithAlias = QueryParser.fillListTable(fromManyTableNameWithAlias);
+        List<Table> actualFromManyTableNameWithAliasOnlySecondTable = QueryParser.fillListTable(fromManyTableNameWithAliasOnlySecondTable);
 
 
         assertEquals(expectedFromOneTableNameWithoutAlias, actualFromOneTableNameWithoutAlias);
