@@ -22,7 +22,7 @@ LIMIT 10;
 ```java
 class Query {
 	private List<String> columns;
-	private List<Source> fromSources;
+	private List<Source> fromTables;
 	private List<Join> joins;
 	private List<WhereClause> whereClauses;
 	private List<String> groupByColumns;
