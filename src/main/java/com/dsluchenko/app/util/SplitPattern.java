@@ -11,8 +11,8 @@ public enum SplitPattern {
 
     private String regex;
 
-    SplitPattern(String regexp) {
-        this.regex = regexp;
+    SplitPattern(String regex) {
+        this.regex = regex;
     }
 
     public String getRegex() {
